@@ -6,7 +6,7 @@ WriteToScreen(0)
 
 function num(val) {
 
-    if(val == 'clear'){
+    if (val == 'clear') {
         num1 = '';
         num2 = '';
         operator = '';
@@ -16,12 +16,19 @@ function num(val) {
 
     //bereken uitkomst
     if (val == '=' && operator && num1 && num2) {
-        WriteToScreen(eval(num1 + operator + num2))
+        try {
+            WriteToScreen(eval(num1 + operator + num2))
+        } catch {
+            WriteToScreen("Error")
+            num1 = ''
+            num2 = ''
+            operator = ''
+            return
+        }
+
         num1 = (eval(num1 + operator + num2)).toString();
         num2 = ''
         operator = ''
-        console.log(num1)
-        console.log(num2)
         return
     }
 
@@ -29,9 +36,18 @@ function num(val) {
         return
     }
 
+    if ((num1 == '=' && val=="-") || (num1.slice(-1) == "." && val == ".") || (num2.slice(-1) == "." && val == ".")) {
+        return
+    }
+
+    if(!num1 && !num2 && !operator){
+        if (val == '+' || val == '/' || val == '*' || val == '^') 
+        return;
+    }
+
     if ((num1) && (!operator) && (val == '+' || val == '-' || val == '/' || val == '*' || val == '^')) {
         operator = val
-        if(val == '^'){
+        if (val == '^') {
             operator = '**'
             WriteToScreen('^')
             return
@@ -41,7 +57,7 @@ function num(val) {
     }
 
     if (!operator && !num2) {
-        if(val == 'PI'){
+        if (val == 'PI') {
             num1 += Math.PI
             WriteToScreen(num1)
             return
@@ -51,17 +67,16 @@ function num(val) {
     }
 
     if (num1 && operator) {
-        if(val == 'PI'){
+        if (val == 'PI') {
             num2 += Math.PI
             WriteToScreen(num2)
             return
         }
-
         num2 += val
         WriteToScreen(num2)
     }
 
-    console.log(num1, num2, operator)
+
 }
 
 function WriteToScreen(value) {
